@@ -35,7 +35,9 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'users',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,7 +57,7 @@ WSGI_APPLICATION = 'YearBookAPI.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-DDATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'yearbook.db',
