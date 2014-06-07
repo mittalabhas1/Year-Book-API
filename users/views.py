@@ -14,15 +14,26 @@ class UserList(APIView):
 		serializer = UserSerializer(users, many=True)
 		return Response(serializer.data)
 
-	# def post(self, request, format=None):
-	# 	serializer = UserSerializer(data=request.DATA)
-	# 	if serializer.is_valid():
-	# 		serializer.save()
-	# 		return Response(serializer.data, status=status.HTTP_201_CREATED)
-	# 	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	def post(self, request, format=None):
+		serializer = UserSerializer(data=request.DATA)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserDetail(APIView):
 	def get(self, request, pk, format=None):
-		user = UserDetails.objects.get(pk=pk)
+		user = UserDetails.objects.get(uid=pk)
 		serializer = UserDetailsSerializer(user)
 		return Response(serializer.data)
+
+	def put(self, request, pk, format=None):
+		try:
+			user = self.get_object(pk)
+			serializer = UserDetailsSerializer(user, data=request.DATA)
+		except Exception, UserDetails.DoesNotExist:
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		else:
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)

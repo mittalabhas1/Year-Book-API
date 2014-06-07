@@ -3,16 +3,6 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
-# class User(models.Model):
-# 	"""
-# 	This class contains the user login information ie username and password
-# 	"""
-# 	username = models.CharField(max_length = 20, blank = False)
-# 	password = models.CharField(max_length = 50, blank = False)
-
-# 	def __unicode__(self):
-# 		return self.username
-
 class CustomUserManager(BaseUserManager):
 	def _create_user(self, username, email, password,
                      is_staff, is_superuser):
