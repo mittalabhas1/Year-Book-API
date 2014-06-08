@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import User, UserDetails
+from users.models import User
 
 class Questions(models.Model):
 	"""

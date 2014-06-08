@@ -1,31 +1,62 @@
-from django.shortcuts import render
-from django.views import generic
+from questions.models import Questions, Answers
+from questions.serializers import QuestionSerializer, AnswerSerializer
+from django.http import Http404
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
-from Questions.models import Questions, Answers
-
-class IndexView(generic.ListView):
-	model = Questions
-	template_name = "Questions/index.html"
-	context_object_name = "list_of_questions"
-
-class QuestionView(generic.DetailView):
-	model = Questions
-	template_name = "Questions/question.html"
-	context_object_name = "ques"
-
-def saveAnswer(request):
+class QuestionList(APIView):
 	"""
-	Controls the answer post mechanism.
-	Redirects to ques:index for success, otherwise to ques:question with 'qid' again.
+	Lists all the questions
 	"""
-	try:
-		user = User.objects.get(pk=request.POST['uid'])
-		question = Questions.objects.get(pk=request.POST['qid'])
-		answer = Answers.objects.create(uid=user, qid=question, answer=request.POST['answer'])
-		answer.save()
-	except ValidationError as e:
-		return HttpResponseRedirect(reverse(
-			'ques:question', args=(request.POST['qid'],)
-		))
-	else:
-		return HttpResponseRedirect(reverse('ques:index'))
+	def get(self, request, format=None):
+		questions = Questions.objects.all()
+		serializer = QuestionSerializer(questions, many=True)
+		return Response(serializer.data)
+
+	def post(self, request, format=None):
+		serializer = QuestionSerializer(data=request.DATA)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class QuestionDetail(APIView):
+	"""
+	Lists the answers of a question of all the Users
+	"""
+	def get(self, request, pk, format=None):
+		answers = Answers.objects.all().filter(qid=pk)
+		serializer = AnswerSerializer(answers, many=True)
+		return Response(serializer.data)
+
+	def put(self, request, pk, format=None):
+		try:
+			question = self.get_object(pk)
+			serializer = AnswerSerializer(question, data=request.DATA)
+		except Exception, Answers.DoesNotExist:
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		else:
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class AnswerView(APIView):
+	"""
+	Answer of a question by a user
+	"""
+	def get(self, request, pk, uid, format=None):
+		answer = Answers.objects.get(uid=uid, qid=pk)
+		serializer = AnswerSerializer(answer)
+		return Response(serializer.data)
+
+	def put(self, request, pk, uid, format=None):
+		try:
+			answer = Answers.objects.get(uid=uid, qid=pk)
+			serializer = AnswerSerializer(answer, data=request.DATA)
+		except Exception, Answer.DoesNotExist:
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		else:
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)

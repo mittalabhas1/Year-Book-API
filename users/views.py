@@ -1,5 +1,7 @@
 from users.models import User, UserDetails
 from users.serializers import UserSerializer, UserDetailsSerializer
+from questions.models import Questions, Answers
+from questions.serializers import QuestionSerializer, AnswerSerializer
 from django.http import Http404
 from rest_framework import status
 from rest_framework.views import APIView
@@ -29,7 +31,7 @@ class UserDetail(APIView):
 
 	def put(self, request, pk, format=None):
 		try:
-			user = self.get_object(pk)
+			user = UserDetails.objects.get(pk=pk)
 			serializer = UserDetailsSerializer(user, data=request.DATA)
 		except Exception, UserDetails.DoesNotExist:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
