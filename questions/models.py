@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import User
+from users.models import User, UserDetails
 
 class Questions(models.Model):
 	"""
@@ -14,9 +14,9 @@ class Answers(models.Model):
 	"""
 	Contains answers of the questions from the registered users
 	"""
-	uid = models.ForeignKey(User)
+	user = models.ManyToManyField(UserDetails, related_name="answers")
 	qid = models.ForeignKey(Questions)
 	answer = models.TextField()
 
-	def __unicode__(self):
-		return self.uid.username + " (" + self.qid.question + ")"
+	# def __unicode__(self):
+	# 	return self.user + " (" + self.qid.question + ")"

@@ -46,13 +46,13 @@ class AnswerView(APIView):
 	Answer of a question by a user
 	"""
 	def get(self, request, pk, uid, format=None):
-		answer = Answers.objects.get(uid=uid, qid=pk)
+		answer = Answers.objects.get(user=uid, qid=pk)
 		serializer = AnswerSerializer(answer)
 		return Response(serializer.data)
 
 	def put(self, request, pk, uid, format=None):
 		try:
-			answer = Answers.objects.get(uid=uid, qid=pk)
+			answer = Answers.objects.get(user=uid, qid=pk)
 			serializer = AnswerSerializer(answer, data=request.DATA)
 		except Exception, Answer.DoesNotExist:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

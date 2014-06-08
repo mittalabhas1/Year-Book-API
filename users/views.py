@@ -24,6 +24,9 @@ class UserList(APIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserDetail(APIView):
+	"""
+	Returns the user details along with all the answers the user has given.
+	"""
 	def get(self, request, pk, format=None):
 		user = UserDetails.objects.get(uid=pk)
 		serializer = UserDetailsSerializer(user)

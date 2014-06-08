@@ -8,6 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
 		fields = ('id', 'username', 'password')
 
 class UserDetailsSerializer(serializers.ModelSerializer):
+	answers = AnswerSerializer(many=True)
 	class Meta:
 		model = UserDetails
-		fields = ('uid', 'name', 'course', 'email', 'phoneNo', 'dob', 'hometown')
+		fields = ('uid', 'name', 'course', 'email', 'phoneNo', 'dob', 'hometown', 'answers')
