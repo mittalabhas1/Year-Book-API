@@ -14,7 +14,7 @@ class Answers(models.Model):
 	"""
 	Contains answers of the questions from the registered users
 	"""
-	user = models.ManyToManyField(UserDetails, related_name="answers")
+	user = models.ForeignKey(UserDetails, related_name="answers")
 	qid = models.ForeignKey(Questions)
 	answer = models.TextField()
 

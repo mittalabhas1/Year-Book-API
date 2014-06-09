@@ -4,9 +4,9 @@ from questions.models import Questions, Answers
 class QuestionSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Questions
-		field = ('id', 'question')
+		fields = ('id', 'question')
 
 class AnswerSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Answers
-		field = ('id', 'uid', 'qid', 'answer')
+		fields = ('id', 'user', 'qid', 'answer')
