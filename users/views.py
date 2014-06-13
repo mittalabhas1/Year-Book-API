@@ -42,3 +42,22 @@ class UserDetail(APIView):
 			if serializer.is_valid():
 				serializer.save()
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+	def post(self, request, pk, format=None):
+		print "hello world"
+		try:
+			user = User.objects.get(pk=pk)
+			print 1
+			serializer = UserDetailsSerializer(user, data=request.DATA)
+			print 2
+		except Exception, UserDetails.DoesNotExist:
+			print 3
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		else:
+			print 4
+			if serializer.is_valid():
+				print 5
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)
+			# else
+				# return Response(serializer.errors)
