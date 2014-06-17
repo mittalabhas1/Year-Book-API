@@ -1,25 +1,16 @@
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from questions.models import Questions, Answers
 from questions.serializers import QuestionSerializer, AnswerSerializer
-from django.http import Http404
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.response import Response
 
-class QuestionList(APIView):
+class QuestionList(generics.ListCreateAPIView):
 	"""
 	Lists all the questions
 	"""
-	def get(self, request, format=None):
-		questions = Questions.objects.all()
-		serializer = QuestionSerializer(questions, many=True)
-		return Response(serializer.data)
-
-	def post(self, request, format=None):
-		serializer = QuestionSerializer(data=request.DATA)
-		if serializer.is_valid():
-			serializer.save()
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	model = Questions
+	serializer_class = QuestionSerializer
 
 class QuestionDetail(APIView):
 	"""
@@ -41,22 +32,9 @@ class QuestionDetail(APIView):
 				serializer.save()
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-class AnswerView(APIView):
+class AnswerView(generics.ListCreateAPIView):
 	"""
 	Answer of a question by a user
 	"""
-	def get(self, request, pk, uid, format=None):
-		answer = Answers.objects.get(user=uid, qid=pk)
-		serializer = AnswerSerializer(answer)
-		return Response(serializer.data)
-
-	def put(self, request, pk, uid, format=None):
-		try:
-			answer = Answers.objects.get(user=uid, qid=pk)
-			serializer = AnswerSerializer(answer, data=request.DATA)
-		except Exception, Answer.DoesNotExist:
-			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-		else:
-			if serializer.is_valid():
-				serializer.save()
-				return Response(serializer.data, status=status.HTTP_201_CREATED)
+	model = Answers
+	serializer_class = AnswerSerializer

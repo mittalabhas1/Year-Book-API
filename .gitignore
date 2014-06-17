@@ -1,5 +1,3 @@
 **/*.pyc
-*pyc
-users/*.pyc
-YearBookAPI/*.pyc
 env
+*.db

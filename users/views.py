@@ -1,63 +1,36 @@
+from rest_framework import generics, status
+from rest_framework.response import Response
+
 from users.models import User, UserDetails
 from users.serializers import UserSerializer, UserDetailsSerializer
-from rest_framework import generics
-# from django.http import Http404
-# from rest_framework import status
-# from rest_framework.views import APIView
-# from rest_framework.response import Response
 
 class UserList(generics.ListCreateAPIView):
-	queryset = User.objects.all()
+	model = User
 	serializer_class = UserSerializer
 
 class UserDetail(generics.ListCreateAPIView):
-	queryset = User.objects.all()
+	model = UserDetails
 	serializer_class = UserDetailsSerializer
 
-# class UserList(APIView):
-# 	"""
-# 	Lists the username and password of all the Users
-# 	"""
-# 	def get(self, request, format=None):
-# 		users = User.objects.all()
-# 		serializer = UserSerializer(users, many=True)
-# 		return Response(serializer.data)
-
-# 	def post(self, request, format=None):
-# 		serializer = UserSerializer(data=request.DATA)
-# 		if serializer.is_valid():
-# 			serializer.save()
-# 			return Response(serializer.data, status=status.HTTP_201_CREATED)
-# 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# class UserDetail(APIView):
-# 	"""
-# 	Returns the user details along with all the answers the user has given.
-# 	"""
-# 	def get(self, request, pk, format=None):
-# 		user = UserDetails.objects.get(uid=pk)
-# 		serializer = UserDetailsSerializer(user)
-# 		return Response(serializer.data)
-
-# 	def put(self, request, pk, format=None):
-# 		try:
-# 			user = UserDetails.objects.get(pk=pk)
-# 			serializer = UserDetailsSerializer(user, data=request.DATA)
-# 		except Exception, UserDetails.DoesNotExist:
-# 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-# 		else:
-# 			if serializer.is_valid():
-# 				serializer.save()
-# 				return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-# 	def post(self, request, pk, format=None):
-# 		print "hello world"
-# 		try:
-# 			user = User.objects.get(pk=pk)
-# 			serializer = UserDetailsSerializer(user, data=request.DATA)
-# 		except Exception, UserDetails.DoesNotExist:
-# 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-# 		else:
-# 			if serializer.is_valid():
-# 				serializer.save()
-# 				return Response(serializer.data, status=status.HTTP_201_CREATED)
+	# def create(self, request, *args, **kwargs):
+	# 	try:
+	# 		obj = UserDetails()
+	# 		id = User.objects.get(pk=request.DATA.get('uid'))
+	# 		obj.uid = id
+	# 		obj.name = request.DATA.get('name')
+	# 		obj.course = request.DATA.get('course')
+	# 		obj.email = request.DATA.get('email')
+	# 		obj.phoneNo = request.DATA.get('phoneNo')
+	# 		obj.dob = request.DATA.get('dob')
+	# 		obj.hometown = request.DATA.get('hometown')
+	# 		obj.answers = request.DATA.get('answers', [])
+	# 		obj.save()
+	# 		# print obj.json_serialize()
+	# 		return Response(obj.json_serialize(), status=status.HTTP_201_CREATED)
+	# 	except User.DoesNotExist:
+	# 		resp = {
+	# 			"error": "APINotFoundError",
+	# 			"code": 400,
+	# 			"error_message": "User not found"
+	# 		}
+	# 		return Response(resp, status=status.HTTP_400_BAD_REQUEST)
