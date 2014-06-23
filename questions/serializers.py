@@ -9,4 +9,4 @@ class QuestionSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Answers
-		fields = ('id', 'user', 'qid', 'answer')
+		fields = ('qid', 'answer')
